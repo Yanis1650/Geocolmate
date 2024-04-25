@@ -1,0 +1,612 @@
+/* Styles généraux */
+body {
+  color: #404040;
+  font: 400 15px/22px "Source Sans Pro", "Helvetica Neue", sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Styles pour l'en-tête */
+.header {
+  display: flex;
+  align-items: center;
+  background-color: #333333;
+  color: white;
+  padding: 20px;
+  position: relative;
+}
+
+/* Styles pour le logo de l'en-tête */
+.header-logo {
+  height: 90px;
+  max-height: 90px;
+  margin-right: 40px;
+}
+
+/* Styles pour le contenu principal de l'en-tête */
+.heading {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Styles pour le titre de l'en-tête */
+.header-title {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: 3px;
+}
+
+/* Styles pour le conteneur de recherche */
+#search-container {
+  margin-left: auto;
+}
+
+
+
+
+
+
+/* Styles pour les onglets géographiques */
+#ongletsgeo {
+  position: absolute;
+  top: 145px; /* Adjust this value to match the height of your header */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex; /* Utilise la propriété flexbox pour centrer les boutons */
+  justify-content: center; /* Aligne les éléments au centre horizontalement */
+  align-items: center; /* Aligne les éléments au centre verticalement */
+  flex-wrap: wrap; /* Permet aux boutons de s'enrouler sur une nouvelle ligne */
+}
+
+/* Styles pour les boutons */
+#ongletsgeo button {
+  background-color: #e9ecef;
+  color: #333;
+  border: none;
+  border-radius: 20px; /* Augmente le rayon des coins arrondis */
+  padding: 10px 20px; /* Augmente le rembourrage intérieur des boutons */
+  font-size: 16px; /* Augmente la taille de la police */
+  font-weight: bold; /* Rend le texte en gras */
+  cursor: pointer;
+  transition: all 0.3s ease; /* Ajoute une transition douce aux changements de style */
+  margin: 0 5px 10px 5px; /* Ajoute un peu d'espace entre les boutons et une marge inférieure pour créer de l'espace entre les lignes */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Ajoute une légère ombre portée */
+}
+
+#ongletsgeo button:hover {
+  background-color: #333;
+  color: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Augmente l'ombre portée à l'état survolé */
+}
+
+/* Styles pour les boutons cliqués */
+#ongletsgeo button.clicked {
+  opacity: 0.7; /* Réduit l'opacité du bouton cliqué à 80% */
+}
+
+
+
+
+
+/* Styles pour les boutons 2D et 3D */
+.map-buttons {
+  position: absolute;
+  top: 145px;
+  left: 16%;
+  z-index: 1000;
+}
+
+.map-buttons button {
+  margin-right: 5px;
+}
+
+#batiment2D,
+#batiment3D {
+  background-color: #CE3B4D;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Style au survol */
+#batiment2D:hover,
+#batiment3D:hover {
+  background-color: #AF193C;
+}
+
+/* Style au clic */
+#batiment2D:active,
+#batiment3D:active {
+  transform: translateY(1px);
+}
+
+/* Box-sizing pour tous les éléments */
+* {
+  box-sizing: border-box;
+}
+
+.sidebar {
+  position: absolute;
+  width: 15%; /* réduit la largeur de la sidebar à 15% */
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  border-right: 1px solid rgb(0 0 0 / 25%);
+  margin-top: 135px; /* ajuste la marge supérieure de la sidebar à 135px pour correspondre à la hauteur de l'en-tête */
+  height: calc(100vh - 135px);
+}
+
+.map {
+  position: absolute;
+  left: 15%; /* ajuste la position de la carte à 15% */
+  width: 85%; /* ajuste la largeur de la carte à 85% */
+  top: 135px; /* ajuste la position supérieure de la carte à 135px pour correspondre à la hauteur de l'en-tête */
+  overflow: hidden;
+  height: calc(100vh - 135px); /* définit la hauteur de la carte à 100% de la hauteur de la fenêtre d'affichage moins la hauteur de l'en-tête */
+  transition: background-color 0.2s ease;
+}
+
+
+
+
+/* Styles pour les titres */
+h1 {
+  font-size: 25px;
+  margin: 0;
+  font-weight: 400;
+  line-height: 20px;
+  padding: 20px 2px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+/* Styles pour les liens */
+a {
+  color: #404040;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #101010;
+}
+
+/* Styles pour les en-têtes */
+.heading {
+  min-height: 60px;
+  line-height: 60px;
+  padding: 0 10px;
+  font-size: 50px;
+}
+
+/* Styles pour les listes */
+.listings {
+  height: 100%;
+  overflow: auto;
+  padding-bottom: 60px;
+}
+
+.listings .item {
+  display: block;
+  border-bottom: 1px solid #eee;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.listings .item:last-child {
+  border-bottom: none;
+}
+
+.listings .item .title {
+  display: block;
+  color: #E7314B;
+  font-weight: 700;
+  font-weight: bold;
+}
+
+.listings .item .title small {
+  font-weight: 400;
+}
+
+.listings .item.active .title,
+.listings .item .title:hover {
+  color: #EA5153;
+}
+
+.listings .item.active {
+  background-color: #f8f8f8;
+}
+
+/* Styles pour les barres de défilement */
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+  border-left: 0;
+  background: rgb(0 0 0 / 10%);
+}
+
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #112A4A;
+  border-radius: 0;
+}
+
+
+
+/* Popup style pour les arrêts */
+.maplibregl-popup.popupstyle {
+  /* background-color: transparent; Fond transparent */
+  border: none; /* Supprimer la bordure */
+  /* border-radius: 50px; Arrondir tous les bords */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre légère */
+  color: #333333;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 0; /* Aucun espacement interne */
+  text-align: center; /* Alignement du texte au centre */
+  width: auto; /* Taille automatique en fonction du contenu */
+  white-space: normal; /* Permettre le retour à la ligne du contenu */
+  max-width: 300px; /* Largeur maximale optionnelle pour éviter les popups trop larges */
+  opacity: 0; /* Commencer avec une opacité à zéro */
+  transition: opacity 0.3s ease; /* Transition pour l'opacité */
+  font-weight: bold; /* Texte en gras */
+}
+
+.maplibregl-popup.popupstyle.show {
+  opacity: 1; /* Opacité totale */
+  border-radius: 5px;
+}
+
+.maplibregl-popup.popupstyle h5 {
+  margin: 0; /* Réinitialisation de la marge */
+  padding: 10px; /* Ajout de remplissage autour du titre */
+  background-color: #333333; /* Fond de couleur pour le titre */
+  color: #ffffff; /* Couleur de texte pour le titre */
+}
+
+.maplibregl-popup.popupstyle p {
+  margin: 5px 0; /* Ajout de marge autour du paragraphe */
+}
+
+.maplibregl-popup.popupstyle .lines {
+  margin-top: 10px; /* Marge supplémentaire au-dessus de la ligne de séparation */
+  border-top: 1px solid #ccc; /* Ligne de séparation */
+}
+
+.maplibregl-popup.popupstyle hr {
+  margin: 8px 0; /* Augmentation de l'espacement */
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+/* Popup style pour les bâtiments */
+.maplibregl-popup.building-popupstyle2 {
+  background-color: transparent; /*Fond transparent */
+  border: none; /* Supprimer la bordure */
+  /* border-radius: 50px; Arrondir tous les bords */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre légère */
+  color: #333333;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 0; /* Aucun espacement interne */
+  text-align: center; /* Alignement du texte au centre */
+  width: auto; /* Taille automatique en fonction du contenu */
+  white-space: normal; /* Permettre le retour à la ligne du contenu */
+  max-width: 300px; /* Largeur maximale optionnelle pour éviter les popups trop larges */
+  opacity: 0; /* Commencer avec une opacité à zéro */
+  transition: opacity 0.3s ease; /* Transition pour l'opacité */
+  font-weight: bold; /* Texte en gras */
+}
+
+.maplibregl-popup.building-popupstyle2.show {
+  opacity: 1; /* Opacité totale */
+  border-radius: 5px;
+}
+.maplibregl-popup.building-popupstyle2 h3 {
+  font-size: 20px; /* Réduire la taille de l'écriture du libelle_bat */
+  margin: 0; /* Réinitialisation de la marge */
+  padding: 10px; /* Ajout de remplissage autour du titre */
+  background-color: #333333; /* Fond de couleur pour le titre */
+  color: #ffffff; /* Couleur de texte pour le titre */
+}
+.maplibregl-popup.building-popupstyle2 h5 {
+  margin: 0; /* Réinitialisation de la marge */
+  font-size: 16px;
+  padding: 10px; /* Ajout de remplissage autour du titre */
+  background-color: #333333; /* Fond de couleur pour le titre */
+  color: #ffffff; /* Couleur de texte pour le titre */
+}
+
+.maplibregl-popup.building-popupstyle2 p {
+  margin: 5px 0; /* Ajout de marge autour du paragraphe */
+}
+
+.maplibregl-popup.building-popupstyle2 .lines {
+  margin-top: 10px; /* Marge supplémentaire au-dessus de la ligne de séparation */
+  border-top: 1px solid #ccc; /* Ligne de séparation */
+}
+
+.maplibregl-popup.building-popupstyle2 hr {
+  margin: 8px 0; /* Augmentation de l'espacement */
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+
+#search-container {
+  position: relative;
+  display: flex;
+  padding: 1rem 0;
+  width: 50%;
+  z-index: 2;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 500px;
+}
+
+#search-container input[type='text'] {
+  position: relative;
+  display: block;
+  background-color: #f5f5f5;
+  font-size: 1rem;
+  line-height: 1rem;
+  color: rgba(0, 0, 0, 0.5);
+  padding: 1rem 2rem;
+  margin-left: 1rem;
+  border-radius: 100px;
+  border: none;
+  flex: 1;
+}
+
+#search-container input[type='text']:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+}
+
+#search-container input[type='text']::placeholder {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+#search-container button {
+  background-color: #004F86;
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  padding: 1rem 2rem;
+  margin-left: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  flex: 0 0 auto;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#search-container button:hover {
+  background-color: #0069d9;
+}
+
+
+#layers-menu {
+  position: fixed;
+  left: calc(100% - 300px);
+  bottom: 140px;
+  /* right: 10px; */
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  background-color: #E0DDD5; /* ajoute un fond gris clair */
+  padding: 10px; /* ajoute un rembourrage de 10 pixels autour des icônes */
+  border-radius: 5px; /* ajoute un rayon de bordure de 5 pixels pour arrondir les coins */
+  border-radius: 20px;
+  opacity: 0.90;
+}
+
+#layers-menu img {
+  border: none;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  margin: 5px 0;
+}
+
+#layers-menu img.active {
+  opacity: 0.5;
+}
+
+
+#menu {
+  position: fixed;
+  bottom: 30px;
+  left: calc(100% - 380px);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row; /* Changement ici pour disposer horizontalement */
+  align-items: flex-start;
+  background-color: #E0DDD5;
+  border-radius: 15px;
+  opacity: 0.90;
+}
+
+#menu label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 15px; /* Ajoute une marge à droite pour séparer les éléments */
+  font-size: 14px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+#menu label:last-child {
+  margin-right: 0; /* Supprime la marge à droite du dernier élément pour éviter un espacement excessif */
+}
+
+#menu label img {
+  width: 80px;
+  height: 80px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+#menu label i {
+  margin-right: 5px;
+}
+
+#menu input[type="radio"]:checked + label {
+  color: #4caf50;
+}
+
+#menu input[type="radio"]:checked + label i {
+  color: #4caf50;
+}
+
+#menu label:hover {
+  color: #4caf50;
+}
+
+#menu label:hover i {
+  color: #4caf50;
+}
+
+/* ///////////// ECHELLE CARTOGRAPHIQUE ////////// */
+/* 
+.maplibregl-ctrl-scale {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.maplibregl-ctrl-scale:hover {
+  background-color: #f0f0f0;
+}
+
+.maplibregl-ctrl-scale-line {
+  background-color: #333;
+  height: 2px;
+  margin: 5px 0;
+  width: 100%;
+}
+
+.maplibregl-ctrl-scale-text {
+  text-align: center;
+  line-height: 1.2;
+  margin: 0 5px;
+} */
+
+/* ///////////// BOUTONS DE NAVIGATION ////////// */
+
+
+
+/* ///////////// BOUTON DE GEOLOCALISATION ////////// */
+
+/* ///////////////// SURVOL LIGNES ////////////// */
+/* #tooltip {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+#tooltip:hover {
+  background-color: #333;
+  color: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+} */
+
+.popup {
+  position: absolute;
+  background-color: #004F86;
+  color: #fff;
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  padding: 10px; /* Réduit le rembourrage intérieur de la popup */
+  font-size: 12px; /* Réduit la taille de la police */
+  font-weight: bold; /* Rend le texte en gras */
+  display: none;
+  z-index: 1000;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  opacity: 0.80;
+}
+
+.popup:hover {
+  background-color: #004F86;
+  color: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup-content {
+  margin: 0;
+  padding: 0;
+}
+
+
+
+
+/* Media queries */
+@media only screen and (max-width: 768px) {
+  /* Styles pour les écrans de taille inférieure à 768px */
+  .header {
+    padding: 15px;
+  }
+
+  .header-logo {
+    height: 60px;
+    max-height: 60px;
+    margin-right: 20px;
+  }
+
+  .header-title {
+    font-size: 1.5rem;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
