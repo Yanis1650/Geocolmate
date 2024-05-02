@@ -1,0 +1,30 @@
+{
+"type": "FeatureCollection",
+"name": "titre_campus",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "CAMPUS": "Faculté de Droit et Science politique\n" }, "geometry": { "type": "Point", "coordinates": [ 3.8736999918855, 43.613381245856523 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "site saint charles" }, "geometry": { "type": "Point", "coordinates": [ 3.87330552281596, 43.616093472172736 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "INSPE de l'Académie de Montpellier" }, "geometry": { "type": "Point", "coordinates": [ 3.868294184776143, 43.619878827228348 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "COMUE Languedoc-Roussillon Universités" }, "geometry": { "type": "Point", "coordinates": [ 3.868145627668223, 43.620972795797641 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "Cité U' Boutonnet\n" }, "geometry": { "type": "Point", "coordinates": [ 3.870347526861055, 43.623899006853975 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "Université Paul-Valéry Montpellier 3\n" }, "geometry": { "type": "Point", "coordinates": [ 3.873568382057789, 43.622016882684449 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "Université Paul-Valéry Montpellier 3\n" }, "geometry": { "type": "Point", "coordinates": [ 3.870067019286547, 43.632610888406063 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "Université Paul-Valéry Montpellier 3\n" }, "geometry": { "type": "Point", "coordinates": [ 3.864602118393092, 43.632547597339695 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "ENSA montpellier" }, "geometry": { "type": "Point", "coordinates": [ 3.856862371161801, 43.636614337590437 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "IUT Montpellier\n" }, "geometry": { "type": "Point", "coordinates": [ 3.851133051134154, 43.636236419772217 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "UFR STAPS" }, "geometry": { "type": "Point", "coordinates": [ 3.851611042837585, 43.640849764855645 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "Campus Saint Priest - Université de Montpellier" }, "geometry": { "type": "Point", "coordinates": [ 3.841757396288575, 43.636352243725078 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "enscm montpellier" }, "geometry": { "type": "Point", "coordinates": [ 3.83778751246521, 43.637291271001153 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "CIHEAM IAM Montpellier\n" }, "geometry": { "type": "Point", "coordinates": [ 3.870204685112324, 43.646647122509428 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "CIRAD" }, "geometry": { "type": "Point", "coordinates": [ 3.868943225711161, 43.649732401162332 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "Faculté de médecine" }, "geometry": { "type": "Point", "coordinates": [ 3.847275469295129, 43.633570731092163 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "Centre Sportif Universitaire de la Motte Rouge" }, "geometry": { "type": "Point", "coordinates": [ 3.863475237401068, 43.635016438603579 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "Université Montpellier\n" }, "geometry": { "type": "Point", "coordinates": [ 3.861643440215412, 43.622035502863284 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "L'Institut Agro Montpellier\n" }, "geometry": { "type": "Point", "coordinates": [ 3.856342907484523, 43.618470670436039 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "INRAE - Centre Occitanie-Montpellier\n" }, "geometry": { "type": "Point", "coordinates": [ 3.854210728426611, 43.616584778697288 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "INRAE - Centre Occitanie-Montpellier\n" }, "geometry": { "type": "Point", "coordinates": [ 3.86015480705256, 43.615757733181439 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "Institut de biologie\n" }, "geometry": { "type": "Point", "coordinates": [ 3.874040424384037, 43.614757663204948 ] } },
+{ "type": "Feature", "properties": { "CAMPUS": "Université Montpellier\n- Economie/AES" }, "geometry": { "type": "Point", "coordinates": [ 3.899209762087531, 43.603827057961205 ] } }
+]
+}
