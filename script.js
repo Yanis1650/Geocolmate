@@ -8,7 +8,6 @@ var map = new maplibregl.Map({
 });
 
 
-
 map.on('style.load', async function () {
 
 
@@ -206,7 +205,7 @@ map.addLayer({
 addBuildingData(map); // Appeler la fonction addBuildingData(map)
 
 
-
+function addBuildingTransports(map) {
   // Ajout de la source de données des lignes de bus
   map.addSource('BUS_L', {
     type: 'geojson',
@@ -365,6 +364,8 @@ layout: {
 'icon-size': 0.5
 }
 });
+}
+addBuildingTransports(map);
 
 // Récupère les icônes et les couches de la carte
 var busIcon = document.getElementById('bus-toggle');
@@ -398,6 +399,8 @@ veloIcon.addEventListener('click', function() {
   veloLayer.setLayoutProperty('visibility', veloLayer.getLayoutProperty('visibility') === 'visible' ? 'none' : 'visible');
   map.fire('data'); // Déclenche un événement de données sur la carte
 });
+
+
 
 
 
@@ -482,30 +485,6 @@ veloIcon.addEventListener('click', function() {
       container: document.querySelector('.geolocate-btn')
     })
   );
-// Ajouter le reste du code de la fonction d'initialisation de la carte ici
-// Gestion des fonds de carte
-var layerList = document.getElementById("menu");
-var inputs = layerList.getElementsByTagName("input");
-
-function switchLayer(layer) {
-  var layerId = layer.target.id;
-  map.setStyle(layerId);
-};
-
-for (var i = 0; i < inputs.length; i++) {
-  inputs[i].onclick = switchLayer;
-};
-
-
-
-
-
-
-
-
-
-
-
 
 
 ////////////////// EFFET SURVOL LIGNES ////////////////////
@@ -535,6 +514,7 @@ map.on("mousemove", function(e) {
     document.querySelector(".popup").style.display = "none";
   }
 });
+
 
 
 
@@ -639,16 +619,6 @@ function buildLocationList(data) {
   }
 }
 
-/////////////////// MENU DEROULANT ////////////////////////////////
-
-// const sidebar = document.querySelector('.sidebar');
-// const toggleSidebar = document.getElementById('toggleSidebar');
-// const map = document.querySelector('.map');
-
-// toggleSidebar.addEventListener('click', () => {
-//   sidebar.classList.toggle('collapsed');
-//   map.classList.toggle('collapsed');
-// });
 
 
 ///////////////////////// CENTRAGE DE LA CARTE SUR UN BÂTIMENT /////////////////////////
@@ -670,17 +640,41 @@ function flyToStore(currentFeature) {
  * Crée une pop-up pour le bâtiment sélectionné.
  * @param {Object} currentFeature - Le bâtiment sélectionné.
  */
-function createBuildingPopUp(currentFeature) {
-  console.log("createBuildingPopUp appelée");
-  console.log(currentFeature);
+
+// Créer une instance de MapboxDirections en dehors de la fonction createBuildingPopUp
+const directions = new MapboxDirections({
+  accessToken: 'pk.eyJ1IjoiZmVsaWNpYTM1IiwiYSI6ImNsc2tkc2V3NzAyenoyanE5aGMzdm5jbDQifQ.gyRQ_bcA6d82MPspunG0wA',
+  unit: 'metric',
+  profile: 'mapbox/walking',
+  flyTo: false,
+  language: 'fr' // Ajoutez cette ligne
+});
+
+let currentPopup = null;
+let currentRoute = null;
+
+function flyToStore(currentFeature) {
+  // Vérifier si une pop-up est déjà ouverte
+  if (currentPopup) {
+    currentPopup.remove();
+  }
+
   const lon = currentFeature.geometry.coordinates[0];
   const lat = currentFeature.geometry.coordinates[1];
-  console.log("Longitude :", lon);
-  console.log("Latitude :", lat);
+  map.flyTo({
+    center: [lon, lat],
+    zoom: 18
+  });
+}
 
-  // Supprimer les pop-ups existantes
-  const popUps = document.getElementsByClassName("maplibregl-popup");
-  if (popUps[0]) popUps[0].remove();
+function createBuildingPopUp(currentFeature) {
+  // Vérifier si une pop-up est déjà ouverte
+  if (currentPopup) {
+    currentPopup.remove();
+  }
+
+  const lon = currentFeature.geometry.coordinates[0];
+  const lat = currentFeature.geometry.coordinates[1];
 
   // Créer une nouvelle pop-up avec la couleur du texte en fonction du campus
   const campusColor = campusColors[currentFeature.properties.CAMPUS] || campusColors['#A01E1E'];
@@ -689,14 +683,279 @@ function createBuildingPopUp(currentFeature) {
   const imagePath = campusImages[currentFeature.properties.libelle_bat] || '';
 
   // Ajouter l'image et les informations du bâtiment à la pop-up
-  const popupContent = `<h3 style="color: ${campusColor}">${currentFeature.properties.libelle_bat}</h3><h5><hr>Campus : ${currentFeature.properties.CAMPUS}</h5>${imagePath ? `<img src="${imagePath}" alt="${currentFeature.properties.libelle_bat}" width="200">` : ''}`;
-
-  const popup = new maplibregl.Popup({ className: "building-popupstyle2", closeOnClick: true, closeButton: false })
+  const popupContent = `
+    <h3 style="color: ${campusColor}">${currentFeature.properties.libelle_bat}</h3>
+    <h5><hr>Campus : ${currentFeature.properties.CAMPUS}</h5>
+    ${imagePath ? `<img src="${imagePath}" alt="${currentFeature.properties.libelle_bat}" width="200">` : ''}
+    <button id="calculate-route-button" class="calculate-route-button">Calculer l'itinéraire</button>
+  `;
+  currentPopup = new maplibregl.Popup({ className: "building-popupstyle2", closeOnClick: true, closeButton: false })
     .setLngLat([lon, lat])
     .setHTML(popupContent)
     .addTo(map);
-  popup.getElement().classList.add('show');
+
+  // Ajouter l'écouteur d'événement sur le bouton "Calculer l'itinéraire"
+  const calculateRouteButton = currentPopup.getElement().querySelector('.calculate-route-button');
+  calculateRouteButton.addEventListener('click', () => {
+    calculateRoute(currentFeature);
+  });
+
+  currentPopup.getElement().classList.add('show');
 }
+
+let savedRoute; // Variable globale pour stocker le trajet calculé
+async function calculateRoute(destination, options = {}) {
+  // Supprimer le trajet existant
+  if (currentRoute) {
+    map.removeLayer('route');
+    map.removeSource('route');
+    currentRoute = null;
+  }
+
+  // Utiliser des coordonnées statiques pour tester la fonction
+  const position = {
+    coords: {
+      longitude: 3.862038,
+      latitude: 43.62505
+    }
+  };
+
+  const origin = [position.coords.longitude, position.coords.latitude];
+  const coordinates = [destination.geometry.coordinates[0], destination.geometry.coordinates[1]]; // Utilisation de destination.geometry.coordinates
+
+  // Définir les options par défaut
+  const defaultOptions = {
+    mode: 'walking',
+    language: 'fr',
+    lineColor: '#0091ea',
+    lineWidth: 5
+  };
+
+  // Fusionner les options par défaut avec les options de l'utilisateur
+  const mergedOptions = { ...defaultOptions, ...options };
+
+  // Récupérer le mode de transport sélectionné
+  const transportSelect = document.getElementById("transport-mode-select"); // Mettre à jour l'identifiant
+  const mode = transportSelect.value;
+
+  // Faire une requête au service Mapbox Directions API
+  const query = `https://api.mapbox.com/directions/v5/mapbox/${mode}/${origin[0]},${origin[1]};${coordinates[0]},${coordinates[1]}?access_token=pk.eyJ1IjoiZmVsaWNpYTM1IiwiYSI6ImNsc2tkc2V3NzAyenoyanE5aGMzdm5jbDQifQ.gyRQ_bcA6d82MPspunG0wA&language=${mergedOptions.language}&steps=false&geometries=geojson`;
+
+  try {
+    const response = await fetch(query);
+    const data = await response.json();
+    const route = data.routes[0];
+
+    // Ajouter la source de tracé au fond de carte actuel
+    map.addSource('route', {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: route.geometry
+      }
+    });
+
+    // Ajouter la couche de tracé au fond de carte actuel
+    map.addLayer({
+      id: 'route',
+      type: 'line',
+      source: 'route',
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': mergedOptions.lineColor,
+        'line-width': mergedOptions.lineWidth
+      }
+    });
+      // Enregistrer le trajet calculé dans la variable globale
+  savedRoute = route;
+
+// Afficher le temps de trajet en minutes
+const travelTime = Math.ceil(route.duration / 60); // Arrondir à l'entier supérieur et convertir en minutes
+document.getElementById("travel-time").innerText = `Temps de trajet : ${travelTime} minutes`;
+    currentRoute = route;
+  } catch (error) {
+    console.error(error);
+  }
+}
+const transportModeSelect = document.getElementById('transport-mode-select');
+
+transportModeSelect.addEventListener('change', () => {
+  const selectedMode = transportModeSelect.value;
+  calculateRoute(currentFeature,map, { mode: selectedMode });
+  // Ajouter un écouteur d'événements 'click' à la carte
+map.on('click', function(e) {
+  // Vérifier si le clic se produit en dehors du popup
+  if (!e.originalEvent.target.matches('.mapboxgl-popup')) {
+    // Supprimer le trajet existant
+    if (currentRoute) {
+      map.removeLayer('route');
+      map.removeSource('route');
+      currentRoute = null;
+    }
+  }
+});
+function addSavedRouteToMap() {
+  // Vérifier si un trajet a été enregistré
+  if (savedRoute) {
+    // Ajouter la source de tracé au fond de carte actuel
+    map.addSource('route', {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: savedRoute.geometry
+      }
+    });
+
+    // Ajouter la couche de tracé au fond de carte actuel
+    map.addLayer({
+      id: 'route',
+      type: 'line',
+      source: 'route',
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': savedRoute.properties.lineColor || '#0091ea',
+        'line-width': savedRoute.properties.lineWidth || 5
+      }
+    });
+  }
+}
+});
+
+
+async function switchLayer(layer) {
+  var layerId = layer.target.id;
+  map.setStyle(layerId);
+
+  // Supprimer la source et la couche de tracé existantes
+  if (map.getSource('route')) {
+    map.removeSource('route');
+    map.removeLayer('route');
+  }
+
+  // Vérifier si les sources et les couches de bâtiments et de transports ont déjà été ajoutées au fond de carte actuel
+  const buildingDataAdded = map.getSource('batiments') !== undefined;
+  const buildingTransportsAdded = map.getSource('BUS_L') !== undefined && map.getSource('TRAM_L') !== undefined && map.getSource('OSM_VELO') !== undefined;
+
+  // Ajouter les sources et les couches de bâtiments et de transports au nouveau fond de carte si nécessaire
+  if (!buildingDataAdded) {
+    addBuildingData(map);
+  }
+  if (!buildingTransportsAdded) {
+    addBuildingTransports(map);
+  }
+
+  // Mettre à jour la fonction de calcul d'itinéraire pour utiliser le nouveau fond de carte
+  directions.setAccessToken(map.getAccessToken());
+  directions.setUnit('metric');
+  directions.setProfile('mapbox/walking');
+  directions.setFlyTo(false);
+  directions.setLanguage('fr');
+
+  // Mettre à jour les fonctions de centrage sur un bâtiment et de création de pop-up pour utiliser le nouveau fond de carte
+  function flyToStore(currentFeature) {
+    const lon = currentFeature.geometry.coordinates[0];
+    const lat = currentFeature.geometry.coordinates[1];
+
+    // Mettre à jour le centre de la carte et le zoom en fonction du fond de carte actuel
+    const currentStyle = map.getStyle();
+    const zoomLevel = currentStyle.layers.find(layer => layer.id === 'batiment3D').layout['visibility'] === 'visible' ? 18 : 15;
+    map.flyTo({
+      center: [lon, lat],
+      zoom: zoomLevel
+    });
+
+    // Supprimer la pop-up existante si nécessaire
+    if (currentPopup) {
+      currentPopup.remove();
+    }
+
+    // Créer une nouvelle pop-up pour le bâtiment sélectionné
+    createBuildingPopUp(currentFeature);
+  }
+
+  function createBuildingPopUp(currentFeature) {
+    const lon = currentFeature.geometry.coordinates[0];
+    const lat = currentFeature.geometry.coordinates[1];
+
+    // Créer une nouvelle pop-up avec la couleur du texte en fonction du campus
+    const campusColor = campusColors[currentFeature.properties.CAMPUS] || campusColors['#A01E1E'];
+
+    // Récupérer le chemin vers l'image du bâtiment à partir de l'objet campusImages
+    const imagePath = campusImages[currentFeature.properties.libelle_bat] || '';
+
+    // Ajouter l'image et les informations du bâtiment à la pop-up
+    const popupContent = `
+      <h3 style="color: ${campusColor}">${currentFeature.properties.libelle_bat}</h3>
+      <h5><hr>Campus : ${currentFeature.properties.CAMPUS}</h5>
+      ${imagePath ? `<img src="${imagePath}" alt="${currentFeature.properties.libelle_bat}" width="200">` : ''}
+      <button id="calculate-route-button" class="calculate-route-button">Calculer l'itinéraire</button>
+    `;
+    currentPopup = new maplibregl.Popup({ className: "building-popupstyle2", closeOnClick: true, closeButton: false })
+      .setLngLat([lon, lat])
+      .setHTML(popupContent)
+      .addTo(map);
+
+    // Ajouter l'écouteur d'événement sur le bouton "Calculer l'itinéraire"
+    const calculateRouteButton = currentPopup.getElement().querySelector('.calculate-route-button');
+    calculateRouteButton.addEventListener('click', () => {
+      calculateRoute(currentFeature);
+    });
+
+    currentPopup.getElement().classList.add('show');
+
+    // Mettre à jour la position de la pop-up en fonction du fond de carte actuel
+    const currentStyle = map.getStyle();
+    const popupOffset = currentStyle.layers.find(layer => layer.id === 'batiment3D').layout['visibility'] === 'visible' ? [0, -40] : [0, -30];
+    currentPopup.setLngLat([lon, lat]).setDOMContent(popupContent).setOptions({ offset: popupOffset });
+  }
+
+  // Ajouter la source et la couche de tracé au nouveau fond de carte si nécessaire
+  if (savedRoute) {
+    map.addSource('route', {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: savedRoute.geometry
+      }
+    });
+
+    map.addLayer({
+      id: 'route',
+      type: 'line',
+      source: 'route',
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': savedRoute.properties.lineColor || '#0091ea',
+        'line-width': savedRoute.properties.lineWidth || 5
+      }
+    });
+  }
+}
+
+var layerList = document.getElementById("menu");
+var inputs = layerList.getElementsByTagName("input");
+
+for (var i = 0; i < inputs.length; i++) {
+  inputs[i].onclick = switchLayer;
+}
+
+
+
+
+
+
 
 /////////////////// EVENEMENT CLICK SUR ARRETS //////////////////////
 //Interactivité CLICK

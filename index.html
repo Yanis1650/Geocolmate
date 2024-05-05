@@ -10,6 +10,17 @@
   <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v3.1.0/mapbox-gl.css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="https://api.maptiler.com/maps/bright/style.json" type="text/css">
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl-directions/build/maplibre-gl-directions.css" type="text/css">
+  <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/maplibre-gl-directions/build/maplibre-gl-directions.js"></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js'></script>  
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css' type='text/css' />
+  <script src='https://unpkg.com/ors-sdk-javascript@1.1.0/dist/ors-sdk.min.js'></script>
+
+
+
 
   <title>Plan des campus</title>
 </head>
@@ -18,17 +29,20 @@
   <!-- En-tête de la page -->
   <header class="header">
     <div class="heading">
-      <a href="https://www.umontpellier.fr/" target="_blank">
-        <img src="./DATA/GCBlanc2.png" alt="Logo de l'Université de Montpellier" class="header-logo">
+      <a href="https://yanis1650.github.io/SITE_GEOCOLMATE/" target="_blank">
+        <img src="./DATA/GCBlanc2.png" alt="Logo de l'Université de Montpellier" class="header-logo" >
       </a>
-      <h1 class="header-title">Université de Montpellier</h1>
-    </div>
+      <a href="https://www.umontpellier.fr/" target="_blank">
+        <h1 class="header-title">Université de Montpellier</h1>
+      </a>
+    </div>    
 
     <!-- Champ de recherche -->
     <div id="search-container">
       <input type="text" id="search-input" placeholder="Rechercher un bâtiment...">
       <button id="search-button">Rechercher</button>
     </div>
+
   </header>
 
   <!-- Barre latérale -->
@@ -40,6 +54,7 @@
   <!-- Carte -->
   <div id="map" class="map"></div>
 
+
   <!-- Info-bulles et pop-ups -->
   <div id="tooltip"></div>
   <div id="popup" class="popup">
@@ -49,15 +64,16 @@
   <!-- Boutons de sélection de campus -->
   <div id='ongletsgeo'>
     <div role="group" aria-label="Small button group">
-      <button type="button" id="Depart" class="btn" data-campus="Vue départ">Vue départ</button>
-      <button type="button" id="universite" class="btn" data-campus="Université Montpellier">Université Montpellier</button>
-      <button type="button" id="Paul_valery" class="btn" data-campus="Université Paul-Valéry Montpellier 3">Université Paul-Valéry</button>
-      <button type="button" id="STAPS" class="btn" data-campus="UFR STAPS">UFR STAPS</button>
-      <button type="button" id="DROIT" class="btn" data-campus="Faculté de Droit et Science politique">Faculté de Droit et Science politique</button>
-      <button type="button" id="medecine" class="btn" data-campus="Faculté de médecine">Faculté de médecine</button>
-      <button type="button" id="Priest" class="btn" data-campus="Campus Saint Priest - Université de Montpellier">Campus Saint Priest</button>
-      <button type="button" id="IUT" class="btn" data-campus="IUT Montpellier">IUT Montpellier</button>
-      <button type="button" id="AGRO" class="btn" data-campus="L'Institut Agro Montpellier">L'Institut Agro</button>
+      <button type="button" id="Depart" class="btn" data-campus="Vue départ" aria-label="Vue départ">Vue départ</button>
+      <button type="button" id="universite" class="btn" data-campus="Université Montpellier" aria-label="Université Montpellier">Université Montpellier</button>
+      <button type="button" id="Paul_valery" class="btn" data-campus="Université Paul-Valéry Montpellier 3" aria-label="Université Paul-Valéry Montpellier 3">Université Paul-Valéry</button>
+      <button type="button" id="STAPS" class="btn" data-campus="UFR STAPS" aria-label="UFR STAPS">UFR STAPS</button>
+      <button type="button" id="DROIT" class="btn" data-campus="Faculté de Droit et Science politique" aria-label="Faculté de Droit et Science politique">Faculté de Droit et Science politique</button>
+      <button type="button" id="medecine" class="btn" data-campus="Faculté de médecine" aria-label="Faculté de médecine">Faculté de médecine</button>
+      <button type="button" id="Priest" class="btn" data-campus="Campus Saint Priest - Université de Montpellier" aria-label="Campus Saint Priest - Université de Montpellier">Campus Saint Priest</button>
+      <button type="button" id="IUT" class="btn" data-campus="IUT Montpellier" aria-label="IUT Montpellier">IUT Montpellier</button>
+      <button type="button" id="AGRO" class="btn" data-campus="L'Institut Agro Montpellier" aria-label="L'Institut Agro Montpellier">L'Institut Agro</button>
+      
     </div>
   </div>
 
@@ -66,6 +82,7 @@
     <img id="bus-toggle" src="./DATA/Icons/bus-de-tournee.png" alt="Bus">
     <img id="tram-toggle" src="./DATA/Icons/tram.png" alt="Tram">
     <img id="velos-toggle" src="./DATA/Icons/bicyclette.png" alt="Vélos">
+    
   </div>
 
   <!-- Boutons de sélection du fond de carte -->
@@ -84,11 +101,23 @@
     </label>
   </div>
 
+  
+  
+
   <!-- Boutons de bascule entre les modes 2D et 3D -->
   <div class="map-buttons">
     <button id="batiment2D">2D</button>
     <button id="batiment3D">3D</button>
   </div>
+  <div class="transport-mode-container">
+    <label for="transport-mode-select">Mode de transport :</label>
+    <select id="transport-mode-select">
+      <option value="driving">Voiture</option>
+      <option value="walking">Marche</option>
+    </select>
+    <span id="travel-time"></span>
+  </div>
+  
 
   <!-- Ajoutez les liens vers les bibliothèques JavaScript -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

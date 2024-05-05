@@ -41,6 +41,9 @@ body {
   margin: 0;
   font-size: 2rem;
   letter-spacing: 3px;
+    color: white;
+    transition: color 0.3s ease;
+  
 }
 
 /* Styles pour le conteneur de recherche */
@@ -502,6 +505,73 @@ a:hover {
 }
 
 
+
+.calculate-route-button {
+  background-color: #0091ea;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.calculate-route-button:hover {
+  background-color: #0077cc;
+}
+
+
+.transport-mode-container {
+  position: absolute;
+  top: 145px;
+  right: 10%;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: #CE3B4D;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.transport-mode-container label {
+  margin-bottom: 5px;
+}
+
+.transport-mode-container select {
+  background-color: #ffffff;
+  color: #333333;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.transport-mode-container select:focus {
+  outline: none;
+}
+
+.transport-mode-container select option {
+  background-color: #ffffff;
+  color: #333333;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.transport-mode-container select option:hover {
+  background-color: #CE3B4D;
+  color: #ffffff;
+}
 
 
 
